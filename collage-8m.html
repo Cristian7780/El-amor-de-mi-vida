@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Para las mujeres como tú · 8M</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --white: #ffffff;
+    --off:   #fafafa;
+    --light: #f2f2f2;
+    --text:  #111111;
+    --soft:  #888888;
+    --terra: #b05c3a;
+    --line:  #e0e0e0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { min-height:100vh; background:var(--white); color:var(--text); overflow-x:hidden; font-family:'Montserrat', sans-serif; }
+
+  /* ── SPLASH ── */
+  #splash {
+    position:fixed; inset:0; background:var(--white);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:50; transition:opacity .9s ease, transform .9s ease;
+    text-align:center; padding:24px;
+  }
+  #splash.out { opacity:0; transform:scale(1.03); pointer-events:none; }
+
+  .splash-date { font-size:.62rem; letter-spacing:.45em; text-transform:uppercase; color:var(--soft); margin-bottom:32px; }
+  .splash-title { font-family:'Cormorant Garamond', serif; font-size:clamp(3.5rem,16vw,7rem); font-weight:700; line-height:.9; color:var(--text); margin-bottom:24px; }
+  .splash-title span { display:block; font-weight:300; font-style:italic; font-size:clamp(1.5rem,7vw,3rem); color:var(--soft); margin-top:8px; }
+  .splash-sub { font-size:.7rem; letter-spacing:.25em; text-transform:uppercase; color:var(--soft); margin-bottom:40px; max-width:260px; line-height:1.8; }
+
+  .splash-btn {
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--text); color:var(--white);
+    border:none; padding:15px 36px;
+    font-family:'Montserrat', sans-serif;
+    font-size:.65rem; letter-spacing:.3em; text-transform:uppercase;
+    cursor:pointer; transition:opacity .3s;
+  }
+  .splash-btn:hover { opacity:.85; }
+  .splash-btn:active { opacity:.7; }
+
+  /* ── COLLAGE ── */
+  #collage { opacity:0; transform:translateY(20px); transition:opacity 1s ease .1s, transform 1s ease .1s; }
+  #collage.show { opacity:1; transform:translateY(0); }
+
+  /* ── QUOTE BLOCKS ── */
+  .q-block {
+    min-height:100svh;
+    display:flex; flex-direction:column;
+    justify-content:center; padding:60px 28px;
+    position:relative; overflow:hidden;
+    border-bottom:1px solid var(--line);
+    opacity:0; transform:translateY(24px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  .q-block.show { opacity:1; transform:translateY(0); }
+
+  /* alternating backgrounds */
+  .q-block:nth-child(odd)  { background:var(--white); }
+  .q-block:nth-child(even) { background:var(--off); }
+
+  /* giant number watermark */
+  .q-num {
+    position:absolute;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700; font-size:clamp(12rem,45vw,22rem);
+    color:var(--text); opacity:.04;
+    line-height:1; user-select:none; pointer-events:none;
+  }
+  .q-num.top-right    { top:-3rem; right:-2rem; }
+  .q-num.bottom-left  { bottom:-3rem; left:-2rem; }
+  .q-num.center       { top:50%; left:50%; transform:translate(-50%,-50%); }
+
+  .q-inner { position:relative; z-index:1; max-width:560px; }
+
+  .q-tag { font-size:.6rem; letter-spacing:.35em; text-transform:uppercase; color:var(--terra); margin-bottom:20px; }
+
+  .q-text {
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.6rem,7vw,3rem);
+    font-weight:300; line-height:1.3;
+    color:var(--text); margin-bottom:20px;
+  }
+  .q-text em { font-style:italic; color:var(--terra); }
+  .q-text.bold { font-weight:700; font-style:normal; font-size:clamp(2rem,9vw,3.8rem); line-height:1.1; }
+  .q-text.italic { font-style:italic; }
+
+  .q-author { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--soft); }
+
+  /* accent line */
+  .q-line { width:32px; height:2px; background:var(--terra); margin-bottom:24px; }
+
+  /* full-bleed accent block */
+  .q-block.accent {
+    background:var(--text) !important;
+    color:var(--white);
+  }
+  .q-block.accent .q-text { color:var(--white); }
+  .q-block.accent .q-text em { color:#d4a87a; }
+  .q-block.accent .q-author { color:#666; }
+  .q-block.accent .q-tag { color:#d4a87a; }
+  .q-block.accent .q-line { background:#d4a87a; }
+  .q-block.accent .q-num { color:var(--white); opacity:.05; }
+
+  /* ── PERSONAL NOTE ── */
+  .note-block {
+    min-height:100svh;
+    display:flex; flex-direction:column;
+    justify-content:center; padding:60px 28px;
+    background:var(--off);
+    position:relative; overflow:hidden;
+    border-top:1px solid var(--line);
+    opacity:0; transform:translateY(24px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  .note-block.show { opacity:1; transform:translateY(0); }
+
+  .note-inner { position:relative; z-index:1; max-width:520px; }
+
+  .note-eyebrow { font-size:.6rem; letter-spacing:.35em; text-transform:uppercase; color:var(--terra); margin-bottom:28px; }
+
+  .note-text {
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.15rem,4.5vw,1.5rem);
+    font-weight:300; line-height:1.85;
+    color:var(--text);
+  }
+  .note-text p+p { margin-top:18px; }
+  .note-text em { color:var(--terra); font-style:italic; }
+
+  .note-sig {
+    margin-top:36px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.8rem,7vw,2.8rem);
+    font-style:italic; font-weight:300;
+    color:var(--text);
+  }
+  .note-sig-sub { font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:var(--soft); margin-top:6px; }
+
+  .note-line { width:32px; height:2px; background:var(--terra); margin-bottom:24px; }
+
+  /* decorative huge text bg */
+  .note-block::after {
+    content:'8M';
+    position:absolute; right:-4vw; bottom:-4vw;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(14rem,55vw,28rem);
+    font-weight:700; color:var(--text);
+    opacity:.03; line-height:1;
+    pointer-events:none; user-select:none;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  #progress { position:fixed; top:0; left:0; height:2px; background:var(--terra); z-index:100; transition:width .1s linear; width:0%; }
+
+  /* ── BURST ── */
+  .burst { position:fixed; pointer-events:none; z-index:999; font-size:.8rem; opacity:0; animation:burstUp .8s ease forwards; color:var(--terra); }
+  @keyframes burstUp { 0%{opacity:.7;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-36px) scale(.3);} }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- SPLASH -->
+<div id="splash">
+  <p class="splash-date">8 de Marzo · 2025</p>
+  <h1 class="splash-title">Para las<br/>mujeres<br/><span>como tú.</span></h1>
+  <p class="splash-sub">Un recordatorio de todo lo que eres y todo lo que mereces</p>
+  <button class="splash-btn" onclick="openCollage()">Leer ↓</button>
+</div>
+
+<!-- COLLAGE -->
+<div id="collage">
+
+  <!-- 1 -->
+  <div class="q-block" id="q1">
+    <div class="q-num top-right">1</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre la fuerza</p>
+      <div class="q-line"></div>
+      <p class="q-text bold">"Soy mujer.<br/>Fenomenal.<br/><em>Fenomenalmente.</em>"</p>
+      <p class="q-author">— Maya Angelou</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="q-block" id="q2">
+    <div class="q-num bottom-left">2</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre el valor</p>
+      <div class="q-line"></div>
+      <p class="q-text italic">"No esperes a que te den permiso para ocupar espacio. Ya lo mereces."</p>
+      <p class="q-author">— Anónimo</p>
+    </div>
+  </div>
+
+  <!-- 3 ACCENT -->
+  <div class="q-block accent" id="q3">
+    <div class="q-num top-right">3</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre la inteligencia</p>
+      <div class="q-line"></div>
+      <p class="q-text">"Una mujer con voz es, por definición,<br/><em>una mujer fuerte.</em>"</p>
+      <p class="q-author">— Melinda Gates</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="q-block" id="q4">
+    <div class="q-num bottom-left">4</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre la ternura</p>
+      <div class="q-line"></div>
+      <p class="q-text italic">"La suavidad no es debilidad. Hace falta mucho valor para ser gentil."</p>
+      <p class="q-author">— Anónimo</p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="q-block" id="q5">
+    <div class="q-num center">5</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre existir</p>
+      <div class="q-line"></div>
+      <p class="q-text bold">"No vine a este mundo<br/>a ser pequeña."</p>
+      <p class="q-author">— Inspirado en Marianne Williamson</p>
+    </div>
+  </div>
+
+  <!-- 6 ACCENT -->
+  <div class="q-block accent" id="q6">
+    <div class="q-num bottom-left">6</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre brillar</p>
+      <div class="q-line"></div>
+      <p class="q-text italic">"Las mujeres que no buscan aprobación son las más libres,<br/>las más <em>irresistibles.</em>"</p>
+      <p class="q-author">— Anónimo</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="q-block" id="q7">
+    <div class="q-num top-right">7</div>
+    <div class="q-inner">
+      <p class="q-tag">✦ Sobre el legado</p>
+      <div class="q-line"></div>
+      <p class="q-text">"No me interesa ser recordada por ser bonita.<br/>Prefiero que digan que <em>cambió las cosas.</em>"</p>
+      <p class="q-author">— Inspirado en Coco Chanel</p>
+    </div>
+  </div>
+
+  <!-- PERSONAL NOTE -->
+  <div class="note-block" id="note">
+    <div class="note-inner">
+      <p class="note-eyebrow">✦ De mí, para ti</p>
+      <div class="note-line"></div>
+      <div class="note-text">
+        <p>Mi amor, armé esto pensando en ti.</p>
+        <p>No porque necesites que nadie te lo recuerde — tú ya lo sabes. Sino porque hoy quería que lo vieras escrito, claro, sin adornos.</p>
+        <p>Eres de esas mujeres de las que hablan estas frases. De las que construyen, de las que brillan sin pedir permiso, de las que te dejan pensando.</p>
+        <p><em>Feliz 8M, mi vida. Hoy y todos los días.</em></p>
+      </div>
+      <p class="note-sig">Chrisss</p>
+      <p class="note-sig-sub">8 de Marzo · con todo mi amor</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function openCollage(){
+    document.getElementById('splash').classList.add('out');
+    setTimeout(()=>{
+      document.getElementById('splash').style.display='none';
+      document.getElementById('collage').classList.add('show');
+      initObserver();
+    },900);
+  }
+
+  function initObserver(){
+    const els=document.querySelectorAll('.q-block, .note-block');
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        e.target.classList.add('show');
+        obs.unobserve(e.target);
+      });
+    },{threshold:.1});
+    els.forEach(el=>obs.observe(el));
+    // show first immediately
+    document.getElementById('q1')?.classList.add('show');
+  }
+
+  // scroll progress bar
+  window.addEventListener('scroll',()=>{
+    const el=document.getElementById('collage');
+    if(!el.classList.contains('show')) return;
+    const scrolled=window.scrollY;
+    const total=document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width=(scrolled/total*100)+'%';
+  });
+
+  function spawnBurst(x,y){
+    const syms=['·','✦','×','◦'];
+    const b=document.createElement('div');
+    b.className='burst';
+    b.textContent=syms[Math.floor(Math.random()*syms.length)];
+    b.style.left=x+'px'; b.style.top=y+'px';
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),850);
+  }
+  document.addEventListener('click',e=>spawnBurst(e.clientX,e.clientY));
+  document.addEventListener('touchstart',e=>spawnBurst(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
+</script>
+</body>
+</html>
